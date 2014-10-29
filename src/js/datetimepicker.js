@@ -13,6 +13,13 @@
  *    @since        2013-Jul-8
  */
 
+(function (factory) {
+    if (typeof define === 'function' && define.amd) {
+        define(['angular', 'moment'], factory); // AMD
+    } else {
+        factory(window.angular, window.moment); // Browser global
+    }
+}(function (angular, moment) {
 angular.module('ui.bootstrap.datetimepicker', [])
   .constant('dateTimePickerConfig', {
     dropdownSelector: null,
@@ -358,3 +365,4 @@ angular.module('ui.bootstrap.datetimepicker', [])
       }
     };
   }]);
+}));
