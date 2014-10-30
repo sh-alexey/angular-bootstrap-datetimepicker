@@ -1,4 +1,3 @@
-/*globals angular, moment, jQuery */
 /*jslint vars:true */
 
 /**
@@ -311,7 +310,7 @@ angular.module('ui.bootstrap.datetimepicker', [])
             scope.ngModel = newDate;
 
             if (configuration.dropdownSelector) {
-              jQuery(configuration.dropdownSelector).dropdown('toggle');
+                angular.element(document.querySelector(configuration.dropdownSelector)).parent().removeClass('open');
             }
 
             scope.onSetTime({ newDate: newDate, oldDate: scope.ngModel });
