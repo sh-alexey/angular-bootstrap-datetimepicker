@@ -24,7 +24,8 @@ angular.module('ui.bootstrap.datetimepicker', [])
     dropdownSelector: null,
     minuteStep: 5,
     minView: 'minute',
-    startView: 'day'
+    startView: 'day',
+    returnType: 'date'
   })
   .directive('datetimepicker', ['dateTimePickerConfig', function (defaultConfig) {
     "use strict";
@@ -46,7 +47,7 @@ angular.module('ui.bootstrap.datetimepicker', [])
     }
 
     var validateConfiguration = function (configuration) {
-      var validOptions = ['startView', 'minView', 'minuteStep', 'dropdownSelector'];
+      var validOptions = ['startView', 'minView', 'minuteStep', 'dropdownSelector', 'returnType'];
 
       for (var prop in configuration) {
         //noinspection JSUnfilteredForInLoop
@@ -57,6 +58,7 @@ angular.module('ui.bootstrap.datetimepicker', [])
 
       // Order of the elements in the validViews array is significant.
       var validViews = ['minute', 'hour', 'day', 'month', 'year'];
+      var validReturnTypes = ['moment', 'date'];
 
       if (validViews.indexOf(configuration.startView) < 0) {
         throw ("invalid startView value: " + configuration.startView);
@@ -78,6 +80,10 @@ angular.module('ui.bootstrap.datetimepicker', [])
       }
       if (configuration.dropdownSelector !== null && !angular.isString(configuration.dropdownSelector)) {
         throw ("dropdownSelector must be a string");
+      }
+
+      if (validReturnTypes.indexOf(configuration.returnType) < 0) {
+        throw ("returnType must be either moment or date. Received: " + configuration.returnType);
       }
     };
 
@@ -307,7 +313,7 @@ angular.module('ui.bootstrap.datetimepicker', [])
             var tempDate = new Date(unixDate);
             var newDate = new Date(tempDate.getTime() + (tempDate.getTimezoneOffset() * 60000));
 
-            scope.ngModel = newDate;
+            scope.ngModel = configuration.returnType === 'date' ? newDate : moment(newDate);
 
             if (configuration.dropdownSelector) {
                 angular.element(document.querySelector(configuration.dropdownSelector)).parent().removeClass('open');
